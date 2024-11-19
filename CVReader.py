@@ -10,9 +10,8 @@ class CVReader:
     def __init__(self, openAiKey):
         self.cvText = ''
         self.coverText = ''
-        self.key = openAiKey
         try:
-            self.client = OpenAI(self.key)
+            self.client = OpenAI(api_key=openAiKey)
             self.ClientConnected = True
         except Exception as e:
             self.ClientConnected = False
