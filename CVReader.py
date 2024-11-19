@@ -64,4 +64,5 @@ class CVReader:
                                     max_tokens=500,
                                     temperature=0.8)
         coverLetter = response.choices[0].message.content
-        return coverLetter
+        letterGenerated = True
+        return coverLetter, letterGenerated
