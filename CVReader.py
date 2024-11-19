@@ -13,8 +13,9 @@ class CVReader:
         try:
             self.client = OpenAI(openAiKey)
             self.ClientConnected = True
-        except:
+        except Exception as e:
             self.ClientConnected = False
+            self.connectionError = e
         
 
     def getCvText(self, cvFile):

@@ -16,4 +16,4 @@ if cvreader.ClientConnected:
         summary, gotResponse = cvreader.getCvSummary()
         st.write(summary)
 else:
-    st.write("Cehck API Connection")
+    st.write(cvreader.connectionError)
