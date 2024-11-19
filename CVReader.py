@@ -54,14 +54,14 @@ class CVReader:
               {self.summary}
               and the below job description:
               {jobDescription}
-              write a job application cover letter. The company name is 
+              write a job application cover letter (300 words). The company name is 
               {employerName} and the job title is {jobTitle}.
                 And the recruiter name is {recruiterName}'''
         messages = [
         {"role": "user", "content": f"{cover_prompt}"}]
         response = self.client.chat.completions.create(model="gpt-4",
                                     messages=messages,
-                                    max_tokens=300,
+                                    max_tokens=500,
                                     temperature=0.8)
         coverLetter = response.choices[0].message.content
         letterGenerated = True
