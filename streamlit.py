@@ -24,7 +24,7 @@ if cvreader.ClientConnected:
             if generateLetter:
                 if employerName != "Employer Name" and employerName != "":
                     if jobTitle != "Job Title" and jobTitle !="":
-                        if recruiterName != "Recruiter" and recruiterName !="":
+                        if recruiterName !="":
                             if jobDescription != "Paste Job Description" and jobDescription != "":
                                 st.write("Ready to Run!")
                             else:
