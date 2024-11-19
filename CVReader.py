@@ -12,7 +12,7 @@ class CVReader:
         self.coverText = ''
 
     def getCVText(self, cvFile):
-        doc = fitz.open(cvFile)
+        doc = fitz.open(stream = cvFile)
         for i in range(doc.page_count):
             page = doc.load_page(i)
             self.cvText += page.get_text()
