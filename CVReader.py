@@ -46,4 +46,5 @@ class CVReader:
             summary = response.choices[0].message.content
         else:
             summary = None
+            gotResponse = False
         return summary, gotResponse
