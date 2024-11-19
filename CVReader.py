@@ -61,7 +61,7 @@ class CVReader:
         {"role": "user", "content": f"{cover_prompt}"}]
         response = self.client.chat.completions.create(model="gpt-4",
                                     messages=messages,
-                                    max_tokens=500,
+                                    max_tokens=300,
                                     temperature=0.8)
         coverLetter = response.choices[0].message.content
         letterGenerated = True
