@@ -19,6 +19,7 @@ if cvreader.ClientConnected:
             jobTitle = st.text_input("Job Title", "Job Title")
             recruiterName = st.text_input("Recruiter Name", "Recruiter")
             jobDescription = st.text_input("Job Description", "Paste Job Description")
-            #coverLetter = cvreader.getCoverLetter()
+            coverLetter = cvreader.getCoverLetter()
+            st.write(coverLetter)
 else:
     st.write(cvreader.connectionError)
