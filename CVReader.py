@@ -28,7 +28,7 @@ class CVReader:
 
     def getCvSummary(self):
         prompt = "Provide a detailed summary, focusing on Education, Experience, Achievments, Certification and Projects: "
-        prompt = prompt + self.cvTextText
+        prompt = prompt + self.cvText
 
         message = [{"role": "user", "content": f"{prompt}"}]
 
