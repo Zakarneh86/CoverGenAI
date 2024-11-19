@@ -12,8 +12,13 @@ uploaded_cv = st.file_uploader("Upload CV")
 if cvreader.ClientConnected:
     if uploaded_cv is not None:
         cvText = cvreader.getCvText(uploaded_cv.read())
-
         summary, gotResponse = cvreader.getCvSummary()
-        st.write(summary)
+        
+        if gotResponse:
+            employerName = st.text_input("Employer Name", "Employer Name")
+            jobTitle = st.text_input("Job Title", "Job Title")
+            recruiterName = st.text_input("Recruiter Name", "Recruiter")
+            jobDescription = st.text_input("Job Description", "Paste Job Description")
+            #coverLetter = cvreader.getCoverLetter()
 else:
     st.write(cvreader.connectionError)
