@@ -19,7 +19,24 @@ if cvreader.ClientConnected:
             jobTitle = st.text_input("Job Title", "Job Title")
             recruiterName = st.text_input("Recruiter Name", "Recruiter")
             jobDescription = st.text_input("Job Description", "Paste Job Description")
-            coverLetter = cvreader.getCoverLetter()
-            st.write(coverLetter)
+            generateLetter = st.button("Generate Letter")
+
+            if generateLetter:
+                if employerName != "Employer Name" and employerName != "":
+                    if jobTitle != "Job Title" and jobTitle !="":
+                        if recruiterName != "Recruiter" and recruiterName !="":
+                            if jobDescription != "Paste Job Description" and jobDescription != "":
+                                st.write("Ready to Run!")
+                            else:
+                                st.write("Job Description is Mandatory")
+                        else:
+                            st.write("Recruiter is Mandatory")
+                    else:
+                        st.write("Job Title is Mandatory")
+                else:
+                    st.write("Employer Name is Mandatory")
+
+            '''coverLetter = cvreader.getCoverLetter()
+            st.write(coverLetter)'''
 else:
     st.write(cvreader.connectionError)
