@@ -16,4 +16,4 @@ class CVReader:
         for i in range(doc.page_count):
             page = doc.load_page(i)
             self.cvText += page.get_text()
-        return self.getCVText
+        return self.cvText
