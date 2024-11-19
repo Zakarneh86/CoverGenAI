@@ -3,7 +3,6 @@ import CVReader
 
 apiKeys = st.secrets["API_Keys"]
 openAiKey = apiKeys["openAI"]
-st.write(openAiKey)
 
 cvreader = CVReader.CVReader(openAiKey)
 
