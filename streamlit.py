@@ -36,7 +36,5 @@ if cvreader.ClientConnected:
                 else:
                     st.write("Employer Name is Mandatory")
 
-            '''coverLetter = cvreader.getCoverLetter()
-            st.write(coverLetter)'''
 else:
     st.write(cvreader.connectionError)
