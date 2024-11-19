@@ -27,6 +27,8 @@ if cvreader.ClientConnected:
                         if recruiterName !="":
                             if jobDescription != "Paste Job Description" and jobDescription != "":
                                 coverLetter, letterGenerated = cvreader.getCoverLetter(employerName, jobTitle, recruiterName, jobDescription)
+                                if letterGenerated:
+                                        st.write(coverLetter)
                             else:
                                 st.write("Job Description is Mandatory")
                         else:
@@ -35,7 +37,6 @@ if cvreader.ClientConnected:
                         st.write("Job Title is Mandatory")
                 else:
                     st.write("Employer Name is Mandatory")
-    if letterGenerated:
-        st.write(coverLetter)
+
 else:
     st.write(cvreader.connectionError)
