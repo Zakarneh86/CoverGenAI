@@ -6,10 +6,9 @@ openAiKey = apiKeys["openAI"]
 
 cvreader = CVReader.CVReader(openAiKey)
 
-
-uploaded_cv = st.file_uploader("Upload CV")
-
 if cvreader.ClientConnected:
+    uploaded_cv = st.file_uploader("Upload CV")
+    
     if uploaded_cv is not None:
         cvText = cvreader.getCvText(uploaded_cv.read())
         summary, gotResponse = cvreader.getCvSummary()
