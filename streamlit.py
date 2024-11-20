@@ -8,7 +8,7 @@ cvreader = CVReader.CVReader(openAiKey)
 
 if cvreader.ClientConnected:
     uploaded_cv = st.file_uploader("Upload CV")
-    
+
     if uploaded_cv is not None:
         cvText = cvreader.getCvText(uploaded_cv.read())
         summary, gotResponse = cvreader.getCvSummary()
@@ -36,6 +36,5 @@ if cvreader.ClientConnected:
                         st.write("Job Title is Mandatory")
                 else:
                     st.write("Employer Name is Mandatory")
-
 else:
     st.write(cvreader.connectionError)
