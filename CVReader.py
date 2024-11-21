@@ -33,10 +33,12 @@ class CVReader:
                 temperature = 0.8)
             gotResponse = True
             self.badClient = False
+            self.clientError = None
         except Exception as e:
             gotResponse = False
             self.badClient = True
-            self.clientError = f"Error: {str(e)}, Type: {type(e)}"
+            #self.clientError = f"Error: {str(e)}, Type: {type(e)}"
+            self.clientError = f'API Connection Error. Contact mm_zak@hotmail.com'
 
         if gotResponse:
             self.summary = response.choices[0].message.content
@@ -62,10 +64,12 @@ class CVReader:
                                         temperature=0.8)
             letterGenerated = True
             self.badClient = False
+            self.clientError = None
         except Exception as e:
             letterGenerated = False
             self.badClient = True
-            self.clientError = f"Error: {str(e)}, Type: {type(e)}"
+            #self.clientError = f"Error: {str(e)}, Type: {type(e)}"
+            self.clientError = f'API Connection Error. Contact mm_zak@hotmail.com'
         
         if letterGenerated:
             coverLetter = response.choices[0].message.content
