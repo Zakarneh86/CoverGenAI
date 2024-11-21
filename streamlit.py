@@ -32,6 +32,7 @@ if uploaded_cv is not None:
                             if not badClient:
                                 with st.container(height = 300):
                                     st.write(coverLetter)
+                                    downLoadLetter = st.button("Download Letter")
                             else:
                                 st.write(connectionError)
                         else:
