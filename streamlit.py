@@ -26,13 +26,12 @@ if uploaded_cv is not None:
                 if jobTitle != "Job Title" and jobTitle !="":
                     if recruiterName !="":
                         if jobDescription != "Paste Job Description" and jobDescription != "":
-                            coverLetter = cvreader.getCoverLetter(employerName, jobTitle, recruiterName, jobDescription)
+                            coverLetter, letterGenerated = cvreader.getCoverLetter(employerName, jobTitle, recruiterName, jobDescription)
                             badClient = cvreader.badClient
                             connectionError = cvreader.clientError
                             if not badClient:
                                 with st.container(height = 300):
                                     st.write(coverLetter)
-                                downLoadLetter = st.button("Download Letter")
                             else:
                                 st.write(connectionError)
                         else:
@@ -45,3 +44,14 @@ if uploaded_cv is not None:
                 st.write("Employer Name is Mandatory")
     else:
         st.write(connectionError)
+
+    if letterGenerated:
+        pdfLetter = cvreader.loadCoverLetter(coverLetter=coverLetter)
+
+        st.download_button(
+            label = "Download Letter",
+            data = pdfLetter,
+            file_name = "Covver Letter.pdf",
+            mime = "application/pdf"
+        )
+

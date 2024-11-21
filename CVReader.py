@@ -2,6 +2,7 @@ import fitz
 import json
 import openai
 from openai import OpenAI
+import io
 
 
 class CVReader:
@@ -75,4 +76,22 @@ class CVReader:
             coverLetter = response.choices[0].message.content
         else:
             coverLetter = None
-        return coverLetter
+        return coverLetter, letterGenerated
+    
+    def loadCoverLetter(self, coverLetter):
+        pdfBuffer = io.BytesIO()
+        letterPDF = fitz.open()
+        page = letterPDF.new_page()
+        startPoint = fitz.Point(72,72)
+        fontName = "helv"
+        fontSize = 12
+
+        page.insert_text(startPoint, coverLetter, fontsize = fontSize,
+        fontname = fontName)
+
+        letterPDF.save(pdfBuffer)
+        letterPDF.close()
+
+        pdfBuffer.seek(0)
+
+        return pdfBuffer
