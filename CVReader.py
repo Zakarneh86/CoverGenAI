@@ -1,7 +1,6 @@
 import fitz
 import json
 import openai
-import os
 from openai import OpenAI
 
 
@@ -10,13 +9,7 @@ class CVReader:
     def __init__(self, openAiKey):
         self.cvText = ''
         self.coverText = ''
-        try:
-            self.client = OpenAI(api_key=openAiKey)
-            self.ClientConnected = True
-        except Exception as e:
-            self.ClientConnected = False
-            self.connectionError = e
-        
+        self.client = OpenAI(api_key=openAiKey)
 
     def getCvText(self, cvFile):
         doc = fitz.open(stream = 
@@ -32,22 +25,24 @@ class CVReader:
 
         message = [{"role": "user", "content": f"{prompt}"}]
 
-        if self.ClientConnected:
-            try:
-                response = self.client.chat.completions.create(
-                    model = "gpt-4",
-                    messages= message,
-                    max_tokens= 500,
-                    temperature = 0.8)
-                gotResponse = True
-            except:
-                gotResponse = False
+        try:
+            response = self.client.chat.completions.create(
+                model = "gpt-4",
+                messages= message,
+                max_tokens= 500,
+                temperature = 0.8)
+            gotResponse = True
+            self.badClient = False
+        except Exception as e:
+            gotResponse = False
+            self.badClient = True
+            self.clientError = e
 
-            if gotResponse:
-                self.summary = response.choices[0].message.content
-            else:
-                self.summary = None
-        return self.summary, gotResponse
+        if gotResponse:
+            self.summary = response.choices[0].message.content
+        else:
+            self.summary = None
+        return self.summary
     
     def getCoverLetter(self, employerName, jobTitle, recruiterName, jobDescription):
         cover_prompt = f'''Given the below resume summary:
@@ -59,10 +54,21 @@ class CVReader:
                 And the recruiter name is {recruiterName}'''
         messages = [
         {"role": "user", "content": f"{cover_prompt}"}]
-        response = self.client.chat.completions.create(model="gpt-4",
-                                    messages=messages,
-                                    max_tokens=500,
-                                    temperature=0.8)
-        coverLetter = response.choices[0].message.content
-        letterGenerated = True
-        return coverLetter, letterGenerated
+        
+        try:
+            response = self.client.chat.completions.create(model="gpt-4",
+                                        messages=messages,
+                                        max_tokens=500,
+                                        temperature=0.8)
+            letterGenerated = True
+            self.badClient = False
+        except Exception as e:
+            letterGenerated = False
+            self.badClient = True
+            self.clientError = e
+        
+        if letterGenerated:
+            coverLetter = response.choices[0].message.content
+        else:
+            coverLetter = None
+        return coverLetter
