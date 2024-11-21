@@ -12,6 +12,7 @@ if uploaded_cv is not None:
     cvText = cvreader.getCvText(uploaded_cv.read())
     summary= cvreader.getCvSummary()
     badClient = cvreader.badClient
+    connectionError = cvreader.clientError
     
     if not badClient:
         employerName = st.text_input("Employer Name", "Employer Name")
@@ -27,10 +28,11 @@ if uploaded_cv is not None:
                         if jobDescription != "Paste Job Description" and jobDescription != "":
                             coverLetter = cvreader.getCoverLetter(employerName, jobTitle, recruiterName, jobDescription)
                             badClient = cvreader.badClient
+                            connectionError = cvreader.clientError
                             if not badClient:
                                 st.write(coverLetter)
                             else:
-                                st.write(cvreader.clientError)
+                                st.write(connectionError)
                         else:
                             st.write("Job Description is Mandatory")
                     else:
@@ -40,4 +42,4 @@ if uploaded_cv is not None:
             else:
                 st.write("Employer Name is Mandatory")
     else:
-        st.write(cvreader.clientError)
+        st.write(connectionError)
