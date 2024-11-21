@@ -34,6 +34,14 @@ if uploaded_cv is not None:
                                     st.write(coverLetter)
                             else:
                                 st.write(connectionError)
+                            if letterGenerated:
+                                pdfLetter = cvreader.loadCoverLetter(coverLetter=coverLetter)
+                                st.download_button(
+                                    label = "Download Letter",
+                                    data = pdfLetter,
+                                    file_name = "Covver Letter.pdf",
+                                    mime = "application/pdf"
+                                )
                         else:
                             st.write("Job Description is Mandatory")
                     else:
@@ -45,13 +53,5 @@ if uploaded_cv is not None:
     else:
         st.write(connectionError)
 
-    if letterGenerated:
-        pdfLetter = cvreader.loadCoverLetter(coverLetter=coverLetter)
 
-        st.download_button(
-            label = "Download Letter",
-            data = pdfLetter,
-            file_name = "Covver Letter.pdf",
-            mime = "application/pdf"
-        )
 
