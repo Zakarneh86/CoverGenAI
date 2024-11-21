@@ -30,7 +30,8 @@ if uploaded_cv is not None:
                             badClient = cvreader.badClient
                             connectionError = cvreader.clientError
                             if not badClient:
-                                st.write(coverLetter)
+                                with st.container(height = 300):
+                                    st.write(coverLetter)
                             else:
                                 st.write(connectionError)
                         else:
