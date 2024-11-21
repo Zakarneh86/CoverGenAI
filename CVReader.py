@@ -36,7 +36,7 @@ class CVReader:
         except Exception as e:
             gotResponse = False
             self.badClient = True
-            self.clientError = e
+            self.clientError = f"Error: {str(e)}, Type: {type(e)}"
 
         if gotResponse:
             self.summary = response.choices[0].message.content
@@ -65,7 +65,7 @@ class CVReader:
         except Exception as e:
             letterGenerated = False
             self.badClient = True
-            self.clientError = e
+            self.clientError = f"Error: {str(e)}, Type: {type(e)}"
         
         if letterGenerated:
             coverLetter = response.choices[0].message.content
