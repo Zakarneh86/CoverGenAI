@@ -1,4 +1,4 @@
-import fitz
+import pymupdf
 import json
 import openai
 from openai import OpenAI
@@ -13,7 +13,7 @@ class CVReader:
         self.client = OpenAI(api_key=openAiKey)
 
     def getCvText(self, cvFile):
-        doc = fitz.open(stream = 
+        doc = pymupdf.open(stream = 
                         cvFile)
         for i in range(doc.page_count):
             page = doc.load_page(i)
@@ -79,15 +79,50 @@ class CVReader:
         return coverLetter, letterGenerated
     
     def loadCoverLetter(self, coverLetter):
-        pdfBuffer = io.BytesIO()
-        letterPDF = fitz.open()
-        page = letterPDF.new_page()
-        startPoint = fitz.Point(72,72)
-        fontName = "helv"
-        fontSize = 12
+        # Letter Parameters
+        a4_width = 595.28
+        a4_height = 841.89
+        bg_color_left = (0.10196, 0.25098, 0.6)
+        bg_color_right = (1, 1, 1)
+        left_rect = pymupdf.Rect(0,0, 186, a4_height)
+        right_rect = pymupdf.Rect(186, 0, a4_width, a4_height)
+        bodyFontName = "times-roman"
+        bodyFontSize = 12
+        sideFontName = 'times-bold'
+        sideFontSize = 30
 
-        page.insert_text(startPoint, coverLetter, fontsize = fontSize,
-        fontname = fontName)
+        #Letter Building
+        pdfBuffer = io.BytesIO()
+        letterPDF = pymupdf.open()
+        page = letterPDF.new_page(width = a4_width, height = a4_height)
+
+        # Letter Formating
+        shape = page.new_shape()
+        shape.draw_rect(left_rect)
+        shape.finish(width=0, color=None, fill=bg_color_left)
+        shape.draw_rect(right_rect)
+        shape.finish(width=0, color=None, fill=bg_color_right)
+        shape.commit()
+
+        # Inserting Side Text
+        page.insert_textbox(
+            pymupdf.Rect(19, 24, 156, 208),
+            'Mohamed Zakarneh',
+            fontsize=30,
+            fontname = 'times-bold',
+            color = (1,1,1),
+            align=0 # Center alignment
+        )
+
+        # Insert Body text
+        page.insert_textbox(
+            pymupdf.Rect(204, 132, 575, 800),
+            coverLetter,
+            fontname = 'times-roman',
+            fontsize=14,
+            align=0,  # Center alignment
+        )
+
 
         letterPDF.save(pdfBuffer)
         letterPDF.close()
