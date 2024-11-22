@@ -39,7 +39,7 @@ if uploaded_cv is not None:
                                 st.download_button(
                                     label = "Download Letter",
                                     data = pdfLetter,
-                                    file_name = "Covver Letter.pdf",
+                                    file_name = "Cover Letter.pdf",
                                     mime = "application/pdf"
                                 )
                         else:

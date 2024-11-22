@@ -111,7 +111,7 @@ class CVReader:
             fontsize=30,
             fontname = 'times-bold',
             color = (1,1,1),
-            align=0 # Center alignment
+            align=0
         )
 
         # Insert Body text
@@ -120,13 +120,12 @@ class CVReader:
             pdfBuffer,
             fontname = 'times-roman',
             fontsize=14,
-            align=0,  # Center alignment
+            align=0
         )
-
 
         letterPDF.save()
         letterPDF.close()
 
         pdfBuffer.seek(0)
 
-        return pdfBuffer
+        return letterPDF
