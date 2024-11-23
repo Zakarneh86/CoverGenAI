@@ -108,8 +108,8 @@ class CVReader:
         page.insert_textbox(
             pymupdf.Rect(19, 24, 156, 208),
             'Mohamed Zakarneh',
-            fontsize=30,
-            fontname = 'times-bold',
+            fontsize=sideFontSize,
+            fontname = sideFontName,
             color = (1,1,1),
             align=0
         )
@@ -118,8 +118,9 @@ class CVReader:
         page.insert_textbox(
             pymupdf.Rect(204, 132, 575, 800),
             coverLetter,
-            fontname = 'times-roman',
-            fontsize=14,
+            fontname = bodyFontName,
+            fontsize=bodyFontSize,
+            color = (0,0,0),
             align=0
         )
 
