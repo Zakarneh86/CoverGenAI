@@ -38,7 +38,7 @@ if uploaded_cv is not None:
                                 pdfLetter = cvreader.loadCoverLetter(coverLetter=coverLetter)
                                 st.download_button(
                                     label = "Download Letter",
-                                    data = pdfLetter,
+                                    data = pdfLetter.getvalue(),
                                     file_name = "Cover Letter.pdf",
                                     mime = "application/pdf"
                                 )

@@ -117,15 +117,15 @@ class CVReader:
         # Insert Body text
         page.insert_textbox(
             pymupdf.Rect(204, 132, 575, 800),
-            pdfBuffer,
+            coverLetter,
             fontname = 'times-roman',
             fontsize=14,
             align=0
         )
 
-        letterPDF.save()
+        letterPDF.save(pdfBuffer)
         letterPDF.close()
 
         pdfBuffer.seek(0)
 
-        return letterPDF
+        return pdfBuffer
