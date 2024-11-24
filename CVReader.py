@@ -11,10 +11,10 @@ class CVReader:
         self.cvText = ''
         self.coverText = ''
         self.client = OpenAI(api_key=openAiKey)
+        self.messages = []
 
     def getCvText(self, cvFile):
-        doc = pymupdf.open(stream = 
-                        cvFile)
+        doc = pymupdf.open(stream = cvFile)
         for i in range(doc.page_count):
             page = doc.load_page(i)
             self.cvText += page.get_text()
@@ -24,12 +24,12 @@ class CVReader:
         prompt = "Provide a detailed summary, focusing on Education, Experience, Achievments, Certification and Projects: "
         prompt = prompt + self.cvText
 
-        message = [{"role": "user", "content": f"{prompt}"}]
+        self.messages.append({"role": "user", "content": prompt})
 
         try:
             response = self.client.chat.completions.create(
                 model = "gpt-4",
-                messages= message,
+                messages= self.messages,
                 max_tokens= 500,
                 temperature = 0.8)
             gotResponse = True
@@ -43,8 +43,10 @@ class CVReader:
 
         if gotResponse:
             self.summary = response.choices[0].message.content
+            self.messages.append({"role": "assistant", "content": self.summary})
         else:
             self.summary = None
+            self.messages.append({"role": "assistant", "content": "Error generating summary."})
         return self.summary
     
     def getCoverLetter(self, employerName, jobTitle, recruiterName, jobDescription):
@@ -55,12 +57,11 @@ class CVReader:
               write a job application cover letter (300 words). The company name is 
               {employerName} and the job title is {jobTitle}.
                 And the recruiter name is {recruiterName}'''
-        messages = [
-        {"role": "user", "content": f"{cover_prompt}"}]
+        self.messages.append({"role": "user", "content": cover_prompt})
         
         try:
             response = self.client.chat.completions.create(model="gpt-4",
-                                        messages=messages,
+                                        messages= self.messages,
                                         max_tokens=500,
                                         temperature=0.8)
             letterGenerated = True
@@ -73,10 +74,30 @@ class CVReader:
             self.clientError = f'API Connection Error. Contact mm_zak@hotmail.com'
         
         if letterGenerated:
-            coverLetter = response.choices[0].message.content
+            self.coverText = response.choices[0].message.content
+            self.messages.append({"role": "assistant", "content": self.coverText})
         else:
-            coverLetter = None
-        return coverLetter, letterGenerated
+            self.coverText = None
+            self.messages.append({"role": "assistant", "content": "Error generating cover letter."})
+        return self.coverText, letterGenerated
+    
+    def customizeCoverLetter(self, feedback):
+        # Add user feedback to the conversation
+        self.messages.append({"role": "user", "content": feedback})
+
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-4",
+                messages=self.messages,
+                max_tokens=500,
+                temperature=0.8,
+            )
+            self.coverText = response.choices[0].message.content
+            self.messages.append({"role": "assistant", "content": self.coverText})
+        except Exception as e:
+            self.coverText = None
+            self.messages.append({"role": "assistant", "content": "Error processing customization."})
+        return self.coverText
     
     def loadCoverLetter(self, coverLetter):
         # Letter Parameters

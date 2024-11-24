@@ -4,54 +4,32 @@ import os
 
 apiKeys = st.secrets["API_Keys"]
 openAiKey = apiKeys["openAI"]
+cv_reader = CVReader(openAiKey)
 
-cvreader = CVReader.CVReader(openAiKey)
-uploaded_cv = st.file_uploader("Upload CV")
+cv_file = st.file_uploader("Upload your CV (PDF format):", type="pdf")
+if cv_file:
+    cv_text = cv_reader.getCvText(cv_file)
+    #st.text_area("Extracted CV Text:", cv_text, height=200)
 
-if uploaded_cv is not None:
-    cvText = cvreader.getCvText(uploaded_cv.read())
-    summary= cvreader.getCvSummary()
-    badClient = cvreader.badClient
-    connectionError = cvreader.clientError
-    
-    if not badClient:
-        employerName = st.text_input("Employer Name", "Employer Name")
-        jobTitle = st.text_input("Job Title", "Job Title")
-        recruiterName = st.text_input("Recruiter Name", "Recruiter")
-        jobDescription = st.text_input("Job Description", "Paste Job Description")
-        generateLetter = st.button("Generate Letter")
+    # Generate CV Summary
+    #if st.button("Generate CV Summary"):
+    summary = cv_reader.getCvSummary()
+    #st.text_area("CV Summary:", summary, height=200)
 
-        if generateLetter:
-            if employerName != "Employer Name" and employerName != "":
-                if jobTitle != "Job Title" and jobTitle !="":
-                    if recruiterName !="":
-                        if jobDescription != "Paste Job Description" and jobDescription != "":
-                            coverLetter, letterGenerated = cvreader.getCoverLetter(employerName, jobTitle, recruiterName, jobDescription)
-                            badClient = cvreader.badClient
-                            connectionError = cvreader.clientError
-                            if not badClient:
-                                with st.container(height = 300):
-                                    st.write(coverLetter)
-                            else:
-                                st.write(connectionError)
-                            if letterGenerated:
-                                pdfLetter = cvreader.loadCoverLetter(coverLetter=coverLetter)
-                                st.download_button(
-                                    label = "Download Letter",
-                                    data = pdfLetter.getvalue(),
-                                    file_name = "Cover Letter.pdf",
-                                    mime = "application/pdf"
-                                )
-                        else:
-                            st.write("Job Description is Mandatory")
-                    else:
-                        st.write("Recruiter is Mandatory")
-                else:
-                    st.write("Job Title is Mandatory")
-            else:
-                st.write("Employer Name is Mandatory")
-    else:
-        st.write(connectionError)
+    # Cover Letter Generation
+    employer_name = st.text_input("Employer Name:")
+    job_title = st.text_input("Job Title:")
+    recruiter_name = st.text_input("Recruiter Name:")
+    job_description = st.text_area("Job Description:", height=150)
 
+    if st.button("Generate Cover Letter"):
+        cover_letter = cv_reader.generateCoverLetter(
+            employer_name, job_title, recruiter_name, job_description
+        )
+        st.text_area("Generated Cover Letter:", cover_letter, height=300)
 
-
+        # Customization Loop
+        feedback = st.text_input("Provide Feedback or Customization Instructions:")
+        if st.button("Apply Customization"):
+            updated_cover_letter = cv_reader.customizeCoverLetter(feedback)
+            st.text_area("Updated Cover Letter:", updated_cover_letter, height=300)
