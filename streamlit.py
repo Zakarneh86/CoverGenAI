@@ -23,7 +23,7 @@ if cv_file:
     job_description = st.text_area("Job Description:", height=150)
 
     if st.button("Generate Cover Letter"):
-        cover_letter = cv_reader.generateCoverLetter(
+        cover_letter = cv_reader.getCoverLetter(
             employer_name, job_title, recruiter_name, job_description
         )
         st.text_area("Generated Cover Letter:", cover_letter, height=300)
