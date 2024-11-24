@@ -4,7 +4,7 @@ import os
 
 apiKeys = st.secrets["API_Keys"]
 openAiKey = apiKeys["openAI"]
-cv_reader = CVReader(openAiKey)
+cv_reader = CVReader.CVReader(openAiKey)
 
 cv_file = st.file_uploader("Upload your CV (PDF format):", type="pdf")
 if cv_file:
