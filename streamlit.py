@@ -26,7 +26,8 @@ if cv_file:
         cover_letter = cv_reader.getCoverLetter(
             employer_name, job_title, recruiter_name, job_description
         )
-        st.text_area("Generated Cover Letter:", st.write(cover_letter), height=300)
+        cover_letter = cover_letter.replace("\n", "\n")
+        st.text_area("Generated Cover Letter:", cover_letter, height=300)
 
         # Customization Loop
         feedback = st.text_input("Provide Feedback or Customization Instructions:")
