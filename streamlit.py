@@ -6,7 +6,7 @@ apiKeys = st.secrets["API_Keys"]
 openAiKey = apiKeys["openAI"]
 cv_reader = CVReader.CVReader(openAiKey)
 
-cv_file = st.file_uploader("Upload your CV (PDF format):", type="pdf")
+cv_file = st.file_uploader("Upload your CV (PDF format):", type="pdf").read()
 if cv_file:
     cv_text = cv_reader.getCvText(cv_file)
     #st.text_area("Extracted CV Text:", cv_text, height=200)
