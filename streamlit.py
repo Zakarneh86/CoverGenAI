@@ -1,31 +1,53 @@
 import streamlit as st
-import CVReader
-import os
+from io import BytesIO
+from CVReader import CVReader
 
-st.title("Cover Letter Generator")
-st.subheader("Upload your CV and generate professional cover letters effortlessly!")
 
-# Load API Key
 apiKeys = st.secrets["API_Keys"]
 openAiKey = apiKeys["openAI"]
-cv_reader = CVReader.CVReader(openAiKey)
-summaryGenerated = False
-# Upload CV File
-cv_file = st.file_uploader("Upload your CV (PDF format):", type="pdf")
-if cv_file and not summaryGenerated:
-    with st.spinner("Extracting text from CV..."):
-        cv_text = cv_reader.getCvText(cv_file.read())
-        if "Error" in cv_text:
-            st.error(cv_text)
-        else:
-            st.success("CV text extracted successfully!")
-            with st.spinner("Generating CV summary..."):
-                summary = cv_reader.getCvSummary()
-                if "Error" in summary:
-                    st.error(summary)
-                else:
-                    st.success("CV summary generated successfully!")
-                    summaryGenerated = True
+if "cv_reader" not in st.session_state:
+    st.session_state.cv_reader = CVReader(openAiKey)
+
+st.title("CV and Cover Letter Generator")
+st.subheader("Upload your CV and generate professional cover letters effortlessly!")
+
+# File Upload
+uploaded_cv = st.file_uploader("Upload your CV (PDF format):", type="pdf")
+if uploaded_cv:
+    # Check if CV text is already stored in session state
+    if "cv_text" not in st.session_state:
+        with st.spinner("Extracting text from CV..."):
+            try:
+                st.session_state.cv_text = st.session_state.cv_reader.getCvText(BytesIO(uploaded_cv.read()))
+                st.success("CV text extracted successfully!")
+            except Exception as e:
+                st.session_state.cv_text = None
+                st.error(f"Error extracting text from CV: {str(e)}")
+    else:
+        st.success("CV text already loaded!")
+    
+    # Display extracted CV text
+    if st.session_state.cv_text:
+        st.text_area("Extracted CV Text:", st.session_state.cv_text, height=200)
+
+        # Generate CV Summary
+        if st.button("Generate CV Summary"):
+            if "cv_summary" not in st.session_state:
+                with st.spinner("Generating CV summary..."):
+                    try:
+                        st.session_state.cv_summary = st.session_state.cv_reader.getCvSummary()
+                        if "Error" in st.session_state.cv_summary:
+                            raise ValueError(st.session_state.cv_summary)
+                        st.success("CV summary generated successfully!")
+                    except Exception as e:
+                        st.session_state.cv_summary = None
+                        st.error(f"Error generating CV summary: {str(e)}")
+            else:
+                st.success("CV summary already generated!")
+            
+            # Display CV summary
+            if st.session_state.cv_summary:
+                st.text_area("CV Summary:", st.session_state.cv_summary, height=200)
 
 # Cover Letter Inputs
 st.subheader("Generate a Cover Letter")
@@ -37,16 +59,26 @@ job_description = st.text_area("Job Description:", height=150)
 if st.button("Generate Cover Letter"):
     if not employer_name or not job_title or not recruiter_name or not job_description:
         st.error("Please fill in all fields for the cover letter.")
+    elif "cv_summary" not in st.session_state:
+        st.error("Please generate the CV summary first.")
     else:
         with st.spinner("Generating cover letter..."):
-            cover_letter, success = cv_reader.getCoverLetter(
-                employer_name, job_title, recruiter_name, job_description
-            )
-            if success:
-                st.success("Cover letter generated successfully!")
-                st.text_area("Generated Cover Letter:", cover_letter, height=300)
-            else:
-                st.error(cover_letter)
+            try:
+                cover_letter, success = st.session_state.cv_reader.getCoverLetter(
+                    employer_name, job_title, recruiter_name, job_description
+                )
+                if success:
+                    st.session_state.cover_letter = cover_letter
+                    st.success("Cover letter generated successfully!")
+                else:
+                    raise ValueError(cover_letter)
+            except Exception as e:
+                st.session_state.cover_letter = None
+                st.error(f"Error generating cover letter: {str(e)}")
+
+        # Display generated cover letter
+        if st.session_state.cover_letter:
+            st.text_area("Generated Cover Letter:", st.session_state.cover_letter, height=300)
 
 # Customize Cover Letter
 st.subheader("Customize Your Cover Letter")
@@ -54,11 +86,17 @@ feedback = st.text_input("Provide Feedback or Customization Instructions:")
 if st.button("Apply Customization"):
     if not feedback:
         st.error("Please provide feedback to customize the cover letter.")
+    elif "cover_letter" not in st.session_state:
+        st.error("Please generate a cover letter first.")
     else:
         with st.spinner("Applying customization..."):
-            updated_cover_letter = cv_reader.customizeCoverLetter(feedback)
-            if "Error" in updated_cover_letter:
-                st.error(updated_cover_letter)
-            else:
+            try:
+                updated_cover_letter = st.session_state.cv_reader.customizeCoverLetter(feedback)
+                st.session_state.cover_letter = updated_cover_letter
                 st.success("Cover letter customized successfully!")
-                st.text_area("Updated Cover Letter:", updated_cover_letter, height=300)
+            except Exception as e:
+                st.error(f"Error customizing cover letter: {str(e)}")
+
+        # Display updated cover letter
+        if st.session_state.cover_letter:
+            st.text_area("Updated Cover Letter:", st.session_state.cover_letter, height=300)
