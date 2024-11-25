@@ -14,7 +14,7 @@ cv_reader = CVReader.CVReader(openAiKey)
 cv_file = st.file_uploader("Upload your CV (PDF format):", type="pdf")
 if cv_file:
     with st.spinner("Extracting text from CV..."):
-        cv_text = cv_reader.getCvText(cv_file)
+        cv_text = cv_reader.getCvText(cv_file.read())
         if "Error" in cv_text:
             st.error(cv_text)
         else:
