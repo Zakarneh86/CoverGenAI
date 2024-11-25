@@ -2,13 +2,13 @@ import streamlit as st
 import CVReader
 import os
 
-st.title("CV and Cover Letter Generator")
+st.title("Cover Letter Generator")
 st.subheader("Upload your CV and generate professional cover letters effortlessly!")
 
 # Load API Key
 apiKeys = st.secrets["API_Keys"]
 openAiKey = apiKeys["openAI"]
-cv_reader = CVReader(openAiKey)
+cv_reader = CVReader.CVReader(openAiKey)
 
 # Upload CV File
 cv_file = st.file_uploader("Upload your CV (PDF format):", type="pdf")
