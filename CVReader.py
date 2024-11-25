@@ -12,77 +12,75 @@ class CVReader:
         self.coverText = ''
         self.client = OpenAI(api_key=openAiKey)
         self.messages = []
+        self.summary = None
+        self.clientError = None
 
     def getCvText(self, cvFile):
-        doc = pymupdf.open(stream = cvFile)
-        for i in range(doc.page_count):
-            page = doc.load_page(i)
-            self.cvText += page.get_text()
-        return self.cvText
+        try:
+            doc = pymupdf.open(stream=cvFile)
+            for i in range(doc.page_count):
+                page = doc.load_page(i)
+                self.cvText += page.get_text()
+            return self.cvText
+        except Exception as e:
+            return f"Error reading CV file: {str(e)}"
 
     def getCvSummary(self):
-        prompt = "Provide a detailed summary, focusing on Education, Experience, Achievments, Certification and Projects: "
-        prompt = prompt + self.cvText
-
+        if not self.cvText:
+            return "No CV text extracted to summarize."
+        
+        prompt = (
+            "Provide a detailed summary, focusing on Education, Experience, "
+            "Achievements, Certification, and Projects: " + self.cvText
+        )
         self.messages.append({"role": "user", "content": prompt})
 
         try:
             response = self.client.chat.completions.create(
-                model = "gpt-4",
-                messages= self.messages,
-                max_tokens= 500,
-                temperature = 0.8)
-            gotResponse = True
-            self.badClient = False
-            self.clientError = None
-        except Exception as e:
-            gotResponse = False
-            self.badClient = True
-            #self.clientError = f"Error: {str(e)}, Type: {type(e)}"
-            self.clientError = f'API Connection Error. Contact mm_zak@hotmail.com'
-
-        if gotResponse:
+                model="gpt-4",
+                messages=self.messages,
+                max_tokens=500,
+                temperature=0.8,
+            )
             self.summary = response.choices[0].message.content
             self.messages.append({"role": "assistant", "content": self.summary})
-        else:
-            self.summary = None
-            self.messages.append({"role": "assistant", "content": "Error generating summary."})
-        return self.summary
-    
-    def getCoverLetter(self, employerName, jobTitle, recruiterName, jobDescription):
-        cover_prompt = f'''Given the below resume summary:
-              {self.summary}
-              and the below job description:
-              {jobDescription}
-              write a job application cover letter (300 words). The company name is 
-              {employerName} and the job title is {jobTitle}.
-                And the recruiter name is {recruiterName}'''
-        self.messages.append({"role": "user", "content": cover_prompt})
-        
-        try:
-            response = self.client.chat.completions.create(model="gpt-4",
-                                        messages= self.messages,
-                                        max_tokens=500,
-                                        temperature=0.8)
-            letterGenerated = True
-            self.badClient = False
-            self.clientError = None
         except Exception as e:
-            letterGenerated = False
-            self.badClient = True
-            #self.clientError = f"Error: {str(e)}, Type: {type(e)}"
-            self.clientError = f'API Connection Error. Contact mm_zak@hotmail.com'
+            self.clientError = f"Error generating summary: {str(e)}"
+            return self.clientError
+
+        return self.summary
+
+    def getCoverLetter(self, employerName, jobTitle, recruiterName, jobDescription):
+        if not self.summary:
+            return "Please generate a CV summary first.", False
         
-        if letterGenerated:
+        cover_prompt = (
+            f"Given the below resume summary:\n{self.summary}\n"
+            f"and the below job description:\n{jobDescription}\n"
+            f"write a job application cover letter (300 words). "
+            f"The company name is {employerName} and the job title is {jobTitle}. "
+            f"And the recruiter name is {recruiterName}"
+        )
+        self.messages.append({"role": "user", "content": cover_prompt})
+
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-4",
+                messages=self.messages,
+                max_tokens=500,
+                temperature=0.8,
+            )
             self.coverText = response.choices[0].message.content
             self.messages.append({"role": "assistant", "content": self.coverText})
-        else:
-            self.coverText = None
-            self.messages.append({"role": "assistant", "content": "Error generating cover letter."})
-        return self.coverText, letterGenerated
-    
+            return self.coverText, True
+        except Exception as e:
+            self.clientError = f"Error generating cover letter: {str(e)}"
+            return self.clientError, False
+
     def customizeCoverLetter(self, feedback):
-        # Add user feedback to the conversation
+        if not self.coverText:
+            return "No cover letter to customize. Generate one first."
+        
         self.messages.append({"role": "user", "content": feedback})
 
         try:
@@ -95,59 +93,5 @@ class CVReader:
             self.coverText = response.choices[0].message.content
             self.messages.append({"role": "assistant", "content": self.coverText})
         except Exception as e:
-            self.coverText = None
-            self.messages.append({"role": "assistant", "content": "Error processing customization."})
+            return f"Error customizing cover letter: {str(e)}"
         return self.coverText
-    
-    def loadCoverLetter(self, coverLetter):
-        # Letter Parameters
-        a4_width = 595.28
-        a4_height = 841.89
-        bg_color_left = (0.10196, 0.25098, 0.6)
-        bg_color_right = (1, 1, 1)
-        left_rect = pymupdf.Rect(0,0, 186, a4_height)
-        right_rect = pymupdf.Rect(186, 0, a4_width, a4_height)
-        bodyFontName = "times-roman"
-        bodyFontSize = 12
-        sideFontName = 'times-bold'
-        sideFontSize = 30
-
-        #Letter Building
-        pdfBuffer = io.BytesIO()
-        letterPDF = pymupdf.open()
-        page = letterPDF.new_page(width = a4_width, height = a4_height)
-
-        # Letter Formating
-        shape = page.new_shape()
-        shape.draw_rect(left_rect)
-        shape.finish(width=0, color=None, fill=bg_color_left)
-        shape.draw_rect(right_rect)
-        shape.finish(width=0, color=None, fill=bg_color_right)
-        shape.commit()
-
-        # Inserting Side Text
-        page.insert_textbox(
-            pymupdf.Rect(19, 24, 156, 208),
-            'Mohamed Zakarneh',
-            fontsize=sideFontSize,
-            fontname = sideFontName,
-            color = (1,1,1),
-            align=0
-        )
-
-        # Insert Body text
-        page.insert_textbox(
-            pymupdf.Rect(204, 132, 575, 800),
-            coverLetter,
-            fontname = bodyFontName,
-            fontsize=bodyFontSize,
-            color = (0,0,0),
-            align=0
-        )
-
-        letterPDF.save(pdfBuffer)
-        letterPDF.close()
-
-        pdfBuffer.seek(0)
-
-        return pdfBuffer
