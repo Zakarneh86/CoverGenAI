@@ -19,17 +19,12 @@ if cv_file:
             st.error(cv_text)
         else:
             st.success("CV text extracted successfully!")
-            st.text_area("Extracted CV Text:", cv_text, height=200)
-
-            # Generate CV Summary
-            if st.button("Generate CV Summary"):
-                with st.spinner("Generating CV summary..."):
-                    summary = cv_reader.getCvSummary()
-                    if "Error" in summary:
-                        st.error(summary)
-                    else:
-                        st.success("CV summary generated successfully!")
-                        st.text_area("CV Summary:", summary, height=200)
+            with st.spinner("Generating CV summary..."):
+                summary = cv_reader.getCvSummary()
+                if "Error" in summary:
+                    st.error(summary)
+                else:
+                    st.success("CV summary generated successfully!")
 
 # Cover Letter Inputs
 st.subheader("Generate a Cover Letter")
