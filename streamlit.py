@@ -9,10 +9,10 @@ st.subheader("Upload your CV and generate professional cover letters effortlessl
 apiKeys = st.secrets["API_Keys"]
 openAiKey = apiKeys["openAI"]
 cv_reader = CVReader.CVReader(openAiKey)
-
+summaryGenerated = False
 # Upload CV File
 cv_file = st.file_uploader("Upload your CV (PDF format):", type="pdf")
-if cv_file:
+if cv_file and not summaryGenerated:
     with st.spinner("Extracting text from CV..."):
         cv_text = cv_reader.getCvText(cv_file.read())
         if "Error" in cv_text:
@@ -25,6 +25,7 @@ if cv_file:
                     st.error(summary)
                 else:
                     st.success("CV summary generated successfully!")
+                    summaryGenerated = True
 
 # Cover Letter Inputs
 st.subheader("Generate a Cover Letter")
