@@ -100,3 +100,27 @@ if st.button("Apply Customization"):
         # Display updated cover letter
         if st.session_state.cover_letter:
             st.text_area("Updated Cover Letter:", st.session_state.cover_letter, height=300)
+
+            st.subheader("Download Your Cover Letter as PDF")
+            user_name = st.text_input("Your Name:", value="Your Name")
+            user_title = st.text_input("Your Title:", value="Job Applicant")
+            if st.button("Generate PDF"):
+                with st.spinner("Generating PDF..."):
+                    try:
+                        pdf_buffer = st.session_state.cv_reader.loadCoverLetter(
+                            coverLetter=st.session_state.cover_letter,
+                            userName=user_name,
+                            userTitle=user_title,
+                        )
+                        if pdf_buffer:
+                            st.success("PDF generated successfully!")
+                            st.download_button(
+                                label="Download Cover Letter PDF",
+                                data=pdf_buffer,
+                                file_name="Cover_Letter.pdf",
+                                mime="application/pdf",
+                            )
+                        else:
+                            st.error("Failed to generate PDF.")
+                    except Exception as e:
+                        st.error(f"Error generating PDF: {str(e)}")
