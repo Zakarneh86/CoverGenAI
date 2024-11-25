@@ -28,26 +28,26 @@ if uploaded_cv:
     
     # Display extracted CV text
     if st.session_state.cv_text:
-        st.text_area("Extracted CV Text:", st.session_state.cv_text, height=200)
+        #st.text_area("Extracted CV Text:", st.session_state.cv_text, height=200)
 
         # Generate CV Summary
-        if st.button("Generate CV Summary"):
-            if "cv_summary" not in st.session_state:
-                with st.spinner("Generating CV summary..."):
-                    try:
-                        st.session_state.cv_summary = st.session_state.cv_reader.getCvSummary()
-                        if "Error" in st.session_state.cv_summary:
-                            raise ValueError(st.session_state.cv_summary)
-                        st.success("CV summary generated successfully!")
-                    except Exception as e:
-                        st.session_state.cv_summary = None
-                        st.error(f"Error generating CV summary: {str(e)}")
-            else:
-                st.success("CV summary already generated!")
-            
-            # Display CV summary
-            if st.session_state.cv_summary:
-                st.text_area("CV Summary:", st.session_state.cv_summary, height=200)
+        #if st.button("Generate CV Summary"):
+        if "cv_summary" not in st.session_state:
+            with st.spinner("Generating CV summary..."):
+                try:
+                    st.session_state.cv_summary = st.session_state.cv_reader.getCvSummary()
+                    if "Error" in st.session_state.cv_summary:
+                        raise ValueError(st.session_state.cv_summary)
+                    st.success("CV summary generated successfully!")
+                except Exception as e:
+                    st.session_state.cv_summary = None
+                    st.error(f"Error generating CV summary: {str(e)}")
+        else:
+            st.success("CV summary already generated!")
+        
+        # Display CV summary
+        #if st.session_state.cv_summary:
+            #st.text_area("CV Summary:", st.session_state.cv_summary, height=200)
 
 # Cover Letter Inputs
 st.subheader("Generate a Cover Letter")
