@@ -137,7 +137,7 @@ class CVReader:
                 pymupdf.Rect(19, 100, left_bar_width - 30, 140),
                 userTitle,
                 fontsize=16,  # Slightly smaller title
-                fontname=bodyFontName,
+                fontname=sideFontName,
                 color=(1, 1, 1),  # White text
                 align=0,  # Left align
             )
