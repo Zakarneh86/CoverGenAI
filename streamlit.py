@@ -112,8 +112,8 @@ if "phone" not in st.session_state:
 
 
 # Allow users to input their name and title for the PDF
-st.session_state.userName = st.text_input("Name", value=st.session_state.user_name)
-st.session_state.eMail = st.text_input("Email Address", value=st.session_state.user_title)
+st.session_state.userName = st.text_input("Name", value=st.session_state.userName)
+st.session_state.eMail = st.text_input("Email Address", value=st.session_state.eMail)
 st.session_state.phone = st.text_input("Mobile/Phone Number", value = st.session_state.phone)
 
 # Generate PDF button
