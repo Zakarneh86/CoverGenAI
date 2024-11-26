@@ -59,8 +59,6 @@ job_description = st.text_area("Job Description:", height=150)
 if st.button("Generate Cover Letter"):
     if not employer_name or not job_title or not recruiter_name or not job_description:
         st.error("Please fill in all fields for the cover letter.")
-    elif "cv_summary" not in st.session_state:
-        st.error("Please generate the CV summary first.")
     else:
         with st.spinner("Generating cover letter..."):
             try:
@@ -101,37 +99,37 @@ if st.button("Apply Customization"):
         if "cover_letter" in st.session_state and st.session_state.cover_letter:
             st.text_area("Generated Cover Letter:", st.session_state.cover_letter, height=300)
 
-    # Section for PDF download functionality
-    st.subheader("Download Your Cover Letter as PDF")
+# Section for PDF download functionality
+st.subheader("Download Your Cover Letter as PDF")
 
     # Ensure the PDF fields and button always remain visible
-    if "user_name" not in st.session_state:
-        st.session_state.user_name = "Your Name"
-    if "user_title" not in st.session_state:
-        st.session_state.user_title = "Job Applicant"
+if "user_name" not in st.session_state:
+    st.session_state.user_name = "Your Name"
+if "user_title" not in st.session_state:
+    st.session_state.user_title = "Job Applicant"
 
-    # Allow users to input their name and title for the PDF
-    st.session_state.user_name = st.text_input("Your Name:", value=st.session_state.user_name)
-    st.session_state.user_title = st.text_input("Your Title:", value=st.session_state.user_title)
+# Allow users to input their name and title for the PDF
+st.session_state.user_name = st.text_input("Your Name:", value=st.session_state.user_name)
+st.session_state.user_title = st.text_input("Your Title:", value=st.session_state.user_title)
 
-    # Generate PDF button
-    if st.button("Generate PDF"):
-        with st.spinner("Generating PDF..."):
-            try:
-                pdf_buffer = st.session_state.cv_reader.loadCoverLetter(
-                    coverLetter=st.session_state.cover_letter,
-                    userName=st.session_state.user_name,
-                    userTitle=st.session_state.user_title,
+# Generate PDF button
+if st.button("Generate PDF"):
+    with st.spinner("Generating PDF..."):
+        try:
+            pdf_buffer = st.session_state.cv_reader.loadCoverLetter(
+                coverLetter=st.session_state.cover_letter,
+                userName=st.session_state.user_name,
+                userTitle=st.session_state.user_title,
+            )
+            if pdf_buffer:
+                st.success("PDF generated successfully!")
+                st.download_button(
+                    label="Download Cover Letter PDF",
+                    data=pdf_buffer,
+                    file_name="Cover_Letter.pdf",
+                    mime="application/pdf",
                 )
-                if pdf_buffer:
-                    st.success("PDF generated successfully!")
-                    st.download_button(
-                        label="Download Cover Letter PDF",
-                        data=pdf_buffer,
-                        file_name="Cover_Letter.pdf",
-                        mime="application/pdf",
-                    )
-                else:
-                    st.error("Failed to generate PDF.")
-            except Exception as e:
-                st.error(f"Error generating PDF: {str(e)}")
+            else:
+                st.error("Failed to generate PDF.")
+        except Exception as e:
+            st.error(f"Error generating PDF: {str(e)}")
