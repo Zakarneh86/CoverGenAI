@@ -116,7 +116,7 @@ st.session_state.user_title = st.text_input("Your Title:", value=st.session_stat
 if st.button("Generate PDF"):
     with st.spinner("Generating PDF..."):
         try:
-            pdf_buffer = st.session_state.cv_reader.loadCoverLetter(
+            pdf_buffer, error = st.session_state.cv_reader.loadCoverLetter(
                 coverLetter=st.session_state.cover_letter,
                 userName=st.session_state.user_name,
                 userTitle=st.session_state.user_title
@@ -130,6 +130,6 @@ if st.button("Generate PDF"):
                     mime="application/pdf",
                 )
             else:
-                st.error("Failed to generate PDF.")
+                st.error(f"Failed to generate PDF: {str()}")
         except Exception as e:
             st.error(f"Error generating PDF: {str(e)}")

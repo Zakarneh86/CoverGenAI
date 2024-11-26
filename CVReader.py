@@ -168,4 +168,4 @@ class CVReader:
 
         except Exception as e:
             print(f"Error generating PDF cover letter: {str(e)}")
-            return None
+            return None, e
