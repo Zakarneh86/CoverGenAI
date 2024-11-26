@@ -167,5 +167,5 @@ class CVReader:
             return pdfBuffer, None, False
 
         except Exception as e:
-            return None, e, True
             raise
+            
