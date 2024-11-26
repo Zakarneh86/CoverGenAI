@@ -164,7 +164,7 @@ class CVReader:
             letterPDF.close()
             pdfBuffer.seek(0)
 
-            return pdfBuffer
+            return pdfBuffer, None, False
 
         except Exception as e:
             print(f"Error generating PDF cover letter: {str(e)}")
