@@ -35,7 +35,7 @@ if uploaded_cv:
         if "cv_summary" not in st.session_state:
             with st.spinner("Generating CV summary..."):
                 try:
-                    st.session_state.cv_summary = st.session_state.cv_reader.getCvSummary()
+                    st.session_state.cv_summary, st.session_state.userName, st.session_state.eMail, st.session_state.phone = st.session_state.cv_reader.getCvSummary()
                     if "Error" in st.session_state.cv_summary:
                         raise ValueError(st.session_state.cv_summary)
                     st.success("CV summary generated successfully!")
@@ -103,14 +103,18 @@ if st.button("Apply Customization"):
 st.subheader("Download Your Cover Letter as PDF")
 
     # Ensure the PDF fields and button always remain visible
-if "user_name" not in st.session_state:
-    st.session_state.user_name = "Your Name"
-if "user_title" not in st.session_state:
-    st.session_state.user_title = "Job Applicant"
+if "userName" not in st.session_state:
+    st.session_state.userName = "Your Name"
+if "eMail" not in st.session_state:
+    st.session_state.eMail = "Email"
+if "phone" not in st.session_state:
+    st.session_state.phone = "Phone"
+
 
 # Allow users to input their name and title for the PDF
-st.session_state.user_name = st.text_input("Your Name:", value=st.session_state.user_name)
-st.session_state.user_title = st.text_input("Your Title:", value=st.session_state.user_title)
+st.session_state.userName = st.text_input(st.session_state.userName, value=st.session_state.user_name)
+st.session_state.eMail = st.text_input(st.session_state.eMail, value=st.session_state.user_title)
+st.session_state.phone = st.text_input(st.session_state.phone, value = st.session_state.phone)
 
 # Generate PDF button
 if st.button("Generate PDF"):
@@ -118,8 +122,9 @@ if st.button("Generate PDF"):
         try:
             pdf_buffer, error, inError = st.session_state.cv_reader.loadCoverLetter(
                 coverLetter=st.session_state.cover_letter,
-                userName=st.session_state.user_name,
-                userTitle=st.session_state.user_title
+                userName=st.session_state.userName,
+                usereMail=st.session_state.eMail,
+                userPhone = st.session_state.phone
             )
             if not inError:
                 st.success("PDF generated successfully!")

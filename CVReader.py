@@ -3,6 +3,7 @@ import json
 import openai
 from openai import OpenAI
 import io
+import re
 
 
 class CVReader:
@@ -30,8 +31,9 @@ class CVReader:
             return "No CV text extracted to summarize."
         
         prompt = (
-            "Provide a detailed summary, focusing on Education, Experience, "
-            "Achievements, Certification, and Projects: " + self.cvText
+            f'''Given {self.cvText}, Provide a detailed summary focusing
+            on Education, Experience, Achievements, Certification and
+            Executed Projects. Also, Extract User Name, Email Address and Phone Number and return them in dict format'''
         )
         self.messages.append({"role": "user", "content": prompt})
 
@@ -40,15 +42,28 @@ class CVReader:
                 model="gpt-4",
                 messages=self.messages,
                 max_tokens=500,
-                temperature=0.8,
+                temperature=0.8
             )
             self.summary = response.choices[0].message.content
             self.messages.append({"role": "assistant", "content": self.summary})
         except Exception as e:
             self.clientError = f"Error generating summary: {str(e)}"
             return self.clientError
+        
+        try:
+            match1 = re.search(r"{", self.summary)
+            match2 = re.search(r"}", self.summary)
+            info = dict(self.summary[match1.start():match2.start()])
+            info = dict(re.findall(r'"(.*?)": "(.*?)"', info))
+            self.userName = info['Name']
+            self.eMail = info['Email']
+            self.phone = info['Phone']
+        except Exception as e:
+            self.userName = None
+            self.eMail = None
+            self.phone = None
 
-        return self.summary
+        return self.summary, self.userName, self.eMail, self.phone
 
     def getCoverLetter(self, employerName, jobTitle, recruiterName, jobDescription):
         if not self.summary:
@@ -96,7 +111,7 @@ class CVReader:
             return f"Error customizing cover letter: {str(e)}"
         return self.coverText
     
-    def loadCoverLetter(self, coverLetter, userName="Your Name", userTitle="Job Applicant"):
+    def loadCoverLetter(self, coverLetter, userName="Your Name", usereMail="Yor Email",userPhone = "Your Phone Number" ):
         try:
             # Letter Parameters
             a4_width = 595.28  # A4 width in points
@@ -135,11 +150,19 @@ class CVReader:
             )
             page.insert_textbox(
                 pymupdf.Rect(19, 105, left_bar_width - 30, 140),
-                userTitle,
+                usereMail,
                 fontsize=16,  # Slightly smaller title
                 fontname=sideFontName,
                 color=(1, 1, 1),  # White text
                 align=0  # Left align
+            )
+            page.insert_textbox(
+            pymupdf.Rect(19, 105, left_bar_width - 30, 140),
+            userPhone,
+            fontsize=16,  # Slightly smaller title
+            fontname=sideFontName,
+            color=(1, 1, 1),  # White text
+            align=0  # Left align
             )
 
             # Insert Body Text (Cover Letter Content)
