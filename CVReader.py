@@ -141,7 +141,7 @@ class CVReader:
 
             # Inserting Left Bar Text (Name and Title)
             page.insert_textbox(
-                pymupdf.Rect(19, 25, left_bar_width - 5, 50),
+                pymupdf.Rect(19, 25, left_bar_width - 5, 75),
                 userName,
                 fontsize=sideFontSize,
                 fontname=sideFontName,
@@ -149,7 +149,7 @@ class CVReader:
                 align=0  # Left align
             )
             page.insert_textbox(
-                pymupdf.Rect(19, 55, left_bar_width - 5, 80),
+                pymupdf.Rect(19, 80, left_bar_width - 5, 100),
                 usereMail,
                 fontsize=16,  # Slightly smaller title
                 fontname=sideFontName,
@@ -157,7 +157,7 @@ class CVReader:
                 align=0  # Left align
             )
             page.insert_textbox(
-            pymupdf.Rect(19, 85, left_bar_width - 5, 110),
+            pymupdf.Rect(19, 105, left_bar_width - 5, 125),
             userPhone,
             fontsize=16,  # Slightly smaller title
             fontname=sideFontName,
