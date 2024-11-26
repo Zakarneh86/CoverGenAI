@@ -111,13 +111,6 @@ class CVReader:
             sideFontName = "times-bold"
             sideFontSize = 30
 
-            # Validate font names
-            available_fonts = pymupdf.get_available_fonts()
-            if bodyFontName not in available_fonts:
-                bodyFontName = "helvetica"  # Fallback font
-            if sideFontName not in available_fonts:
-                sideFontName = "helvetica-bold"  # Fallback font
-
             # Letter Building
             pdfBuffer = io.BytesIO()
             letterPDF = pymupdf.open()
