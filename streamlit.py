@@ -46,8 +46,8 @@ if uploaded_cv:
             st.success("CV summary already generated!")
         
         # Display CV summary
-        #if st.session_state.cv_summary:
-            #st.text_area("CV Summary:", st.session_state.cv_summary, height=200)
+        if st.session_state.cv_summary:
+            st.text_area("CV Summary:", st.session_state.cv_summary, height=200)
 
 # Cover Letter Inputs
 st.subheader("Generate a Cover Letter")
