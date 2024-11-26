@@ -121,7 +121,7 @@ if st.button("Generate PDF"):
                 userName=st.session_state.user_name,
                 userTitle=st.session_state.user_title
             )
-            if pdf_buffer:
+            if pdf_buffer.getvalue():
                 st.success("PDF generated successfully!")
                 st.download_button(
                     label="Download Cover Letter PDF",
