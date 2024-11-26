@@ -33,7 +33,7 @@ class CVReader:
         prompt = (
             f'''Given {self.cvText}, Provide a detailed summary focusing
             on Education, Experience, Achievements, Certification and
-            Executed Projects. Also, Extract User Name, Email Address and Phone Number and return them in dict format'''
+            Executed Projects. Also, return in a dict format "User Name, Email Address and Phone Number"'''
         )
         self.messages.append({"role": "user", "content": prompt})
 
