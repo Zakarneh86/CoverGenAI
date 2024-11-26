@@ -55,9 +55,9 @@ class CVReader:
             match2 = re.search(r"}", self.summary)
             info = dict(self.summary[match1.start():match2.start()])
             info = dict(re.findall(r'"(.*?)": "(.*?)"', info))
-            self.userName = info['Name']
-            self.eMail = info['Email']
-            self.phone = info['Phone']
+            self.userName = info['User Name']
+            self.eMail = info['Email Address']
+            self.phone = info['Phone Number']
         except Exception as e:
             self.userName = None
             self.eMail = None
