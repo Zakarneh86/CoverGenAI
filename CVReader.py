@@ -131,7 +131,7 @@ class CVReader:
                 fontsize=sideFontSize,
                 fontname=sideFontName,
                 color=(1, 1, 1),  # White text
-                align=0,  # Left align
+                align=0  # Left align
             )
             page.insert_textbox(
                 pymupdf.Rect(19, 100, left_bar_width - 30, 140),
@@ -139,7 +139,7 @@ class CVReader:
                 fontsize=16,  # Slightly smaller title
                 fontname=sideFontName,
                 color=(1, 1, 1),  # White text
-                align=0,  # Left align
+                align=0  # Left align
             )
 
             # Insert Body Text (Cover Letter Content)
@@ -149,7 +149,7 @@ class CVReader:
                 fontname=bodyFontName,
                 fontsize=bodyFontSize,
                 color=(0, 0, 0),  # Black text
-                align=0,  # Left align
+                align=0  # Left align
             )
 
             # Save PDF to buffer
