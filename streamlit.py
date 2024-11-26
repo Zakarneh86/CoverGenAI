@@ -121,7 +121,7 @@ if st.button("Generate PDF"):
                 userName=st.session_state.user_name,
                 userTitle=st.session_state.user_title
             )
-            if pdf_buffer.getvalue():
+            if not error:
                 st.success("PDF generated successfully!")
                 st.download_button(
                     label="Download Cover Letter PDF",
@@ -129,7 +129,5 @@ if st.button("Generate PDF"):
                     file_name="Cover_Letter.pdf",
                     mime="application/pdf",
                 )
-            else:
-                st.error(f"Failed to generate PDF: {str()}")
         except Exception as e:
             st.error(f"Error generating PDF: {str(e)}")
