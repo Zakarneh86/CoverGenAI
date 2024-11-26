@@ -167,5 +167,5 @@ class CVReader:
             return pdfBuffer, None, False
 
         except Exception as e:
-            print(f"Error generating PDF cover letter: {str(e)}")
             return None, e, True
+            raise
