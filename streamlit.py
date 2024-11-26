@@ -130,4 +130,4 @@ if st.button("Generate PDF"):
                     mime="application/pdf",
                 )
         except Exception as e:
-            st.error(f"Error generating PDF: {str(error)}")
+            st.error(f"Error generating PDF: {str(e)}")
