@@ -96,76 +96,76 @@ class CVReader:
             return f"Error customizing cover letter: {str(e)}"
         return self.coverText
     
-def loadCoverLetter(self, coverLetter, userName="Your Name", userTitle="Job Applicant"):
-    try:
-        # Letter Parameters
-        a4_width = 595.28  # A4 width in points
-        a4_height = 841.89  # A4 height in points
-        left_bar_width = 186
-        bg_color_left = (0.10196, 0.25098, 0.6)  # Dark blue
-        bg_color_right = (1, 1, 1)  # White
-        left_rect = pymupdf.Rect(0, 0, left_bar_width, a4_height)
-        right_rect = pymupdf.Rect(left_bar_width, 0, a4_width, a4_height)
-        bodyFontName = "times-roman"
-        bodyFontSize = 12
-        sideFontName = "times-bold"
-        sideFontSize = 30
+    def loadCoverLetter(self, coverLetter, userName="Your Name", userTitle="Job Applicant"):
+        try:
+            # Letter Parameters
+            a4_width = 595.28  # A4 width in points
+            a4_height = 841.89  # A4 height in points
+            left_bar_width = 186
+            bg_color_left = (0.10196, 0.25098, 0.6)  # Dark blue
+            bg_color_right = (1, 1, 1)  # White
+            left_rect = pymupdf.Rect(0, 0, left_bar_width, a4_height)
+            right_rect = pymupdf.Rect(left_bar_width, 0, a4_width, a4_height)
+            bodyFontName = "times-roman"
+            bodyFontSize = 12
+            sideFontName = "times-bold"
+            sideFontSize = 30
 
-        # Validate font names
-        available_fonts = pymupdf.get_available_fonts()
-        if bodyFontName not in available_fonts:
-            bodyFontName = "helvetica"  # Fallback font
-        if sideFontName not in available_fonts:
-            sideFontName = "helvetica-bold"  # Fallback font
+            # Validate font names
+            available_fonts = pymupdf.get_available_fonts()
+            if bodyFontName not in available_fonts:
+                bodyFontName = "helvetica"  # Fallback font
+            if sideFontName not in available_fonts:
+                sideFontName = "helvetica-bold"  # Fallback font
 
-        # Letter Building
-        pdfBuffer = io.BytesIO()
-        letterPDF = pymupdf.open()
-        page = letterPDF.new_page(width=a4_width, height=a4_height)
+            # Letter Building
+            pdfBuffer = io.BytesIO()
+            letterPDF = pymupdf.open()
+            page = letterPDF.new_page(width=a4_width, height=a4_height)
 
-        # Letter Formatting
-        shape = page.new_shape()
-        shape.draw_rect(left_rect)
-        shape.finish(width=0, color=None, fill=bg_color_left)
-        shape.draw_rect(right_rect)
-        shape.finish(width=0, color=None, fill=bg_color_right)
-        shape.commit()
+            # Letter Formatting
+            shape = page.new_shape()
+            shape.draw_rect(left_rect)
+            shape.finish(width=0, color=None, fill=bg_color_left)
+            shape.draw_rect(right_rect)
+            shape.finish(width=0, color=None, fill=bg_color_right)
+            shape.commit()
 
-        # Inserting Left Bar Text (Name and Title)
-        page.insert_textbox(
-            pymupdf.Rect(19, 24, left_bar_width - 30, 100),
-            userName,
-            fontsize=sideFontSize,
-            fontname=sideFontName,
-            color=(1, 1, 1),  # White text
-            align=0,  # Left align
-        )
-        page.insert_textbox(
-            pymupdf.Rect(19, 100, left_bar_width - 30, 140),
-            userTitle,
-            fontsize=16,  # Slightly smaller title
-            fontname=bodyFontName,
-            color=(1, 1, 1),  # White text
-            align=0,  # Left align
-        )
+            # Inserting Left Bar Text (Name and Title)
+            page.insert_textbox(
+                pymupdf.Rect(19, 24, left_bar_width - 30, 100),
+                userName,
+                fontsize=sideFontSize,
+                fontname=sideFontName,
+                color=(1, 1, 1),  # White text
+                align=0,  # Left align
+            )
+            page.insert_textbox(
+                pymupdf.Rect(19, 100, left_bar_width - 30, 140),
+                userTitle,
+                fontsize=16,  # Slightly smaller title
+                fontname=bodyFontName,
+                color=(1, 1, 1),  # White text
+                align=0,  # Left align
+            )
 
-        # Insert Body Text (Cover Letter Content)
-        page.insert_textbox(
-            pymupdf.Rect(left_bar_width + 18, 132, a4_width - 20, 800),
-            coverLetter,
-            fontname=bodyFontName,
-            fontsize=bodyFontSize,
-            color=(0, 0, 0),  # Black text
-            align=0,  # Left align
-        )
+            # Insert Body Text (Cover Letter Content)
+            page.insert_textbox(
+                pymupdf.Rect(left_bar_width + 18, 132, a4_width - 20, 800),
+                coverLetter,
+                fontname=bodyFontName,
+                fontsize=bodyFontSize,
+                color=(0, 0, 0),  # Black text
+                align=0,  # Left align
+            )
 
-        # Save PDF to buffer
-        letterPDF.save(pdfBuffer)
-        letterPDF.close()
-        pdfBuffer.seek(0)
+            # Save PDF to buffer
+            letterPDF.save(pdfBuffer)
+            letterPDF.close()
+            pdfBuffer.seek(0)
 
-        return pdfBuffer
+            return pdfBuffer
 
-    except Exception as e:
-        print(f"Error generating PDF cover letter: {str(e)}")
-        return None
+        except Exception as e:
+            print(f"Error generating PDF cover letter: {str(e)}")
+            return None
