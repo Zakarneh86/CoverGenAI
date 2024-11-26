@@ -124,7 +124,7 @@ class CVReader:
             bodyFontName = "times-roman"
             bodyFontSize = 12
             sideFontName = "times-bold"
-            sideFontSize = 16
+            sideFontSize = 30
 
             # Letter Building
             pdfBuffer = io.BytesIO()
