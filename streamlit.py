@@ -119,13 +119,13 @@ if st.button("Generate PDF"):
             pdf_buffer = st.session_state.cv_reader.loadCoverLetter(
                 coverLetter=st.session_state.cover_letter,
                 userName=st.session_state.user_name,
-                userTitle=st.session_state.user_title,
+                userTitle=st.session_state.user_title
             )
             if pdf_buffer:
                 st.success("PDF generated successfully!")
                 st.download_button(
                     label="Download Cover Letter PDF",
-                    data=pdf_buffer,
+                    data=pdf_buffer.getvalue(),
                     file_name="Cover_Letter.pdf",
                     mime="application/pdf",
                 )
