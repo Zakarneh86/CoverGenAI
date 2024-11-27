@@ -188,9 +188,10 @@ class CVReader:
                 align=0  # Left align
             )
 
+            text = f'''Re: {jobTitle}'''
             page.insert_textbox(
                 pymupdf.Rect(left_bar_width + 18, 51, a4_width - 20, 70),
-                f'''Re: {jobTitle}''',
+                text,
                 fontname=bodyFontName,
                 fontsize=bodyFontSize,
                 color=(0, 0, 0),  # Black text
