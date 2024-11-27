@@ -172,7 +172,7 @@ class CVReader:
             formatted_date = current_date.strftime("%B %d, %Y")
 
             page.insert_textbox(
-            pymupdf.Rect(left_bar_width + 18, 19, a4_width - 20, 30),
+            pymupdf.Rect(left_bar_width + 18, 19, a4_width - 20, 50),
             formatted_date,
             fontname=bodyFontName,
             fontsize=bodyFontSize,
@@ -181,7 +181,7 @@ class CVReader:
             )
 
             page.insert_textbox(
-                pymupdf.Rect(left_bar_width + 18, 35, a4_width - 20, 55),
+                pymupdf.Rect(left_bar_width + 18, 60, a4_width - 20, 80),
                 companyName,
                 fontname=bodyFontName,
                 fontsize=bodyFontSize,
@@ -191,7 +191,7 @@ class CVReader:
 
             text = f'''Re: {jobTitle}'''
             page.insert_textbox(
-                pymupdf.Rect(left_bar_width + 18, 60, a4_width - 20, 70),
+                pymupdf.Rect(left_bar_width + 18, 90, a4_width - 20, 110),
                 text,
                 fontname=bodyFontName,
                 fontsize=bodyFontSize,
