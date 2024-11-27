@@ -4,6 +4,7 @@ import openai
 from openai import OpenAI
 import io
 import re
+from datetime import date
 
 
 class CVReader:
@@ -111,7 +112,7 @@ class CVReader:
             return f"Error customizing cover letter: {str(e)}"
         return self.coverText
     
-    def loadCoverLetter(self, coverLetter, userName="Your Name", usereMail="Yor Email",userPhone = "Your Phone Number" ):
+    def loadCoverLetter(self, coverLetter, userName="Your Name", usereMail="Yor Email",userPhone = "Your Phone Number", companyName = 'Company Name', jobTitle = 'Job Title' ):
         try:
             # Letter Parameters
             a4_width = 595.28  # A4 width in points
@@ -166,6 +167,36 @@ class CVReader:
             )
 
             # Insert Body Text (Cover Letter Content)
+            current_date = date.today()
+            formatted_date = current_date.strftime("%B %d, %Y")
+
+            page.insert_textbox(
+            pymupdf.Rect(left_bar_width + 18, 19, a4_width - 20, 10),
+            formatted_date,
+            fontname=bodyFontName,
+            fontsize=bodyFontSize,
+            color=(0, 0, 0),  # Black text
+            align=0  # Left align
+            )
+
+            page.insert_textbox(
+                pymupdf.Rect(left_bar_width + 18, 30, a4_width - 20, 20),
+                companyName,
+                fontname=bodyFontName,
+                fontsize=bodyFontSize,
+                color=(0, 0, 0),  # Black text
+                align=0  # Left align
+            )
+
+            page.insert_textbox(
+                pymupdf.Rect(left_bar_width + 18, 51, a4_width - 20, 70),
+                f'''Re: {jobTitle}''',
+                fontname=bodyFontName,
+                fontsize=bodyFontSize,
+                color=(0, 0, 0),  # Black text
+                align=0  # Left align
+            )
+
             page.insert_textbox(
                 pymupdf.Rect(left_bar_width + 18, 132, a4_width - 20, 800),
                 coverLetter,

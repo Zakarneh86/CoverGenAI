@@ -8,7 +8,7 @@ openAiKey = apiKeys["openAI"]
 if "cv_reader" not in st.session_state:
     st.session_state.cv_reader = CVReader(openAiKey)
 
-st.title("CV and Cover Letter Generator")
+st.title("Cover Letter Generator")
 st.subheader("Upload your CV and generate professional cover letters effortlessly!")
 
 # File Upload
@@ -124,7 +124,9 @@ if st.button("Generate PDF"):
                 coverLetter=st.session_state.cover_letter,
                 userName=st.session_state.userName,
                 usereMail=st.session_state.eMail,
-                userPhone = st.session_state.phone
+                userPhone = st.session_state.phone,
+                companyName = employer_name,
+                jobTitle = job_title
             )
             if not inError:
                 st.success("PDF generated successfully!")
