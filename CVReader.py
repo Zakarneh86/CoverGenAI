@@ -54,7 +54,7 @@ class CVReader:
         try:
             match1 = re.search(r"{", self.summary)
             match2 = re.search(r"}", self.summary)
-            info = dict(self.summary[match1.start():match2.start()])
+            info = self.summary[match1.start():match2.start()]
             info = dict(re.findall(r'"(.*?)": "(.*?)"', info))
             self.userName = info['User Name']
             self.eMail = info['Email Address']
