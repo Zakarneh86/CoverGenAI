@@ -35,7 +35,8 @@ if uploaded_cv:
         if "cv_summary" not in st.session_state:
             with st.spinner("Generating CV summary..."):
                 try:
-                    st.session_state.cv_summary, st.session_state.userName, st.session_state.eMail, st.session_state.phone = st.session_state.cv_reader.getCvSummary()
+                    response, st.session_state.cv_summary, st.session_state.userName, st.session_state.eMail, st.session_state.phone = st.session_state.cv_reader.getCvSummary()
+                    st.write(response)
                     if "Error" in st.session_state.cv_summary:
                         raise ValueError(st.session_state.cv_summary)
                     st.success("CV summary generated successfully!")

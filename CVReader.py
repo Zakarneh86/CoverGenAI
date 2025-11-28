@@ -63,8 +63,9 @@ class CVReader:
             self.userName = None
             self.eMail = None
             self.phone = None
+        
 
-        return self.summary, self.userName, self.eMail, self.phone
+        return response,self.summary, self.userName, self.eMail, self.phone
 
     def getCoverLetter(self, employerName, jobTitle, recruiterName, jobDescription):
         if not self.summary:
