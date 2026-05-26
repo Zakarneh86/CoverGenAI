@@ -41,6 +41,7 @@ if uploaded_cv:
                     st.success("CV summary generated successfully!")
                 except Exception as e:
                     st.session_state.cv_summary = None
+                    st.write(str(e))
                     st.error(f"Error generating CV summary: {str(e)}")
         else:
             st.success("CV summary already generated!")
