@@ -19,7 +19,7 @@ if uploaded_cv:
         with st.spinner("Extracting text from CV..."):
             try:
                 st.session_state.cv_text = st.session_state.cv_reader.getCvText(BytesIO(uploaded_cv.read()))
-                #st.success("CV text extracted successfully!")
+                st.success("CV text extracted successfully!")
             except Exception as e:
                 st.session_state.cv_text = None
                 st.error(f"Error extracting text from CV: {str(e)}")
@@ -27,8 +27,8 @@ if uploaded_cv:
         st.success("CV text already loaded!")
     
     # Display extracted CV text
-    if st.session_state.cv_text:
-        #st.text_area("Extracted CV Text:", st.session_state.cv_text, height=200)
+    if "cv_text" in st.session_state:
+        st.text_area("Extracted CV Text:", st.session_state.cv_text, height=200)
 
         # Generate CV Summary
         #if st.button("Generate CV Summary"):
