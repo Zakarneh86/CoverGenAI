@@ -19,7 +19,7 @@ if uploaded_cv:
         with st.spinner("Extracting text from CV..."):
             try:
                 st.session_state.cv_text = st.session_state.cv_reader.getCvText(BytesIO(uploaded_cv.read()))
-                st.success("CV text extracted successfully!")
+                #st.success("CV text extracted successfully!")
             except Exception as e:
                 st.session_state.cv_text = None
                 st.error(f"Error extracting text from CV: {str(e)}")
