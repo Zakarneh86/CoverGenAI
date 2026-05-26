@@ -33,6 +33,7 @@ if uploaded_cv:
         # Generate CV Summary
         #if st.button("Generate CV Summary"):
         if "cv_summary" not in st.session_state:
+            st.write('Summary Generating')
             with st.spinner("Generating CV summary..."):
                 try:
                     st.session_state.cv_summary, st.session_state.userName, st.session_state.eMail, st.session_state.phone = st.session_state.cv_reader.getCvSummary()
