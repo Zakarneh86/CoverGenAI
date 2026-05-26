@@ -39,6 +39,7 @@ if uploaded_cv:
                     if "Error" in st.session_state.cv_summary:
                         raise ValueError(st.session_state.cv_summary)
                     st.success("CV summary generated successfully!")
+                    st.write('Summary Generated')
                 except Exception as e:
                     st.session_state.cv_summary = None
                     st.write(str(e))
