@@ -47,23 +47,21 @@ class CVReader:
             )
             self.summary = response.choices[0].message.content
             self.messages.append({"role": "assistant", "content": self.summary})
+            try:
+                match1 = re.search(r"{", self.summary)
+                match2 = re.search(r"}", self.summary)
+                info = self.summary[match1.start():match2.start()]
+                info = dict(re.findall(r'"(.*?)": "(.*?)"', info))
+                self.userName = info['User Name']
+                self.eMail = info['Email Address']
+                self.phone = info['Phone Number']
+            except Exception as e:
+                self.userName = None
+                self.eMail = None
+                self.phone = None
         except Exception as e:
             self.clientError = f"Error generating summary: {str(e)}"
-            return self.clientError
-        
-        try:
-            match1 = re.search(r"{", self.summary)
-            match2 = re.search(r"}", self.summary)
-            info = self.summary[match1.start():match2.start()]
-            info = dict(re.findall(r'"(.*?)": "(.*?)"', info))
-            self.userName = info['User Name']
-            self.eMail = info['Email Address']
-            self.phone = info['Phone Number']
-        except Exception as e:
-            self.userName = None
-            self.eMail = None
-            self.phone = None
-        
+            return self.clientError     
 
         return self.summary, self.userName, self.eMail, self.phone
 
