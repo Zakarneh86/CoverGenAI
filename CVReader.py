@@ -18,6 +18,7 @@ class CVReader:
         self.clientError = None
 
     def getCvText(self, cvFile):
+        self.cvText = ''
         try:
             doc = pymupdf.open(stream=cvFile)
             for i in range(doc.page_count):
@@ -29,7 +30,7 @@ class CVReader:
 
     def getCvSummary(self):
         if not self.cvText:
-            return "No CV text extracted to summarize."
+            return "Error: No CV text extracted to summarize.", None, None, None
         
         prompt = (
             f'''Given {self.cvText}, Provide a detailed summary focusing
@@ -61,7 +62,7 @@ class CVReader:
                 self.phone = None
         except Exception as e:
             self.clientError = f"Error generating summary: {str(e)}"
-            return self.clientError     
+            return self.clientError, None, None, None
 
         return self.summary, self.userName, self.eMail, self.phone
 
