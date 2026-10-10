@@ -41,9 +41,9 @@ class CVReader:
 
         try:
             response = self.client.chat.completions.create(
-                model="gpt-5.5",
+                model="gpt-4",
                 messages=self.messages,
-                max_completion_tokens=500,
+                max_tokens=500,
                 temperature=0.8
             )
             self.summary = response.choices[0].message.content
@@ -81,9 +81,9 @@ class CVReader:
 
         try:
             response = self.client.chat.completions.create(
-                model="gpt-5.5",
+                model="gpt-4",
                 messages=self.messages,
-                max_completion_tokens=500,
+                max_tokens=500,
                 temperature=0.8,
             )
             self.coverText = response.choices[0].message.content
@@ -101,9 +101,9 @@ class CVReader:
 
         try:
             response = self.client.chat.completions.create(
-                model="gpt-5.5",
+                model="gpt-4",
                 messages=self.messages,
-                max_completion_tokens=500,
+                max_tokens=500,
                 temperature=0.8,
             )
             self.coverText = response.choices[0].message.content
